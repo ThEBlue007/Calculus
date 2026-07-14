@@ -1,9 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const leaderboardSchema = new mongoose.Schema({
   username: { type: String, required: true },
   score: { type: Number, required: true },
-  mode: { type: String, required: true }
+  mode: { type: String, default: 'timeAttack' }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Leaderboard', leaderboardSchema);
+const Leaderboard = mongoose.models.Leaderboard || mongoose.model('Leaderboard', leaderboardSchema);
+export default Leaderboard;

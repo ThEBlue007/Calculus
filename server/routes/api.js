@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const User = require('../models/User');
-const Leaderboard = require('../models/Leaderboard');
-const { generateQuestion, validateAnswer, useAthena, getCorrectAnswer } = require('../data/questions');
+import User from '../models/User.js';
+import Leaderboard from '../models/Leaderboard.js';
+import { generateQuestion, validateAnswer, useAthena, getCorrectAnswer } from '../data/questions.js';
+import mongoose from 'mongoose';
 
 // --- SYSTEM APIs --- //
 router.get('/health', (req, res) => res.json({ status: 'ok', message: 'API is running' }));
@@ -56,8 +57,7 @@ router.post('/apollo', async (req, res) => {
   const { id, isTwin } = req.body;
   if (!id) return res.status(400).json({ error: 'Missing question ID' });
 
-  const mongoose = require('mongoose');
-  const ActiveQuestion = mongoose.model('ActiveQuestion');
+  const ActiveQuestion = mongoose.models.ActiveQuestion;
 
   let q;
   if (isTwin) {
@@ -238,4 +238,4 @@ router.get('/leaderboard', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

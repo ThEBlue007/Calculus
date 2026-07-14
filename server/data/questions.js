@@ -1,5 +1,5 @@
-const { v4: uuidv4 } = require('uuid');
-const ActiveQuestion = require('../models/ActiveQuestion');
+import { v4 as uuidv4 } from 'uuid';
+import ActiveQuestion from '../models/ActiveQuestion.js';
 
 function shuffleOptions(correctOption, wrongOptions) {
   const allOptions = [correctOption, ...wrongOptions];
@@ -323,4 +323,4 @@ async function getCorrectAnswer(id, isTwin = false) {
   return isTwin ? q.twinData.correctIndex : q.correctIndex;
 }
 
-module.exports = { generateQuestion, validateAnswer, useAthena, getCorrectAnswer };
+export { generateQuestion, validateAnswer, useAthena, getCorrectAnswer };

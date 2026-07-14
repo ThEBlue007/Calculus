@@ -1,8 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-const { connectDB } = require('../server/config/db');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { connectDB } from '../server/config/db.js';
+import apiRoutes from '../server/routes/api.js';
 
+dotenv.config();
 connectDB();
 
 const app = express();
@@ -11,6 +13,6 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/api', require('../server/routes/api'));
+app.use('/api', apiRoutes);
 
-module.exports = app;
+export default app;
