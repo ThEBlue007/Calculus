@@ -17,6 +17,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
   const [maxStreak, setMaxStreak] = useState(0);
   const [questionCount, setQuestionCount] = useState(0);
   const [question, setQuestion] = useState(null);
+  const [nextQuestionCache, setNextQuestionCache] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showMinigame, setShowMinigame] = useState(false);
   
@@ -57,6 +58,21 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     fetchNextQuestion(0);
     return () => stopBackgroundMusic();
   }, []);
+
+  const prefetchQuestion = async (currentCount, currentScore) => {
+    try {
+      let difficulty = 'easy';
+      if (currentScore > 1500 || currentCount > 20) difficulty = 'hard';
+      else if (currentScore > 500 || currentCount > 10) difficulty = 'medium';
+
+      const nextCount = currentCount + 1;
+      const res = await fetch(`${API_URL}/question?difficulty=${difficulty}&count=${nextCount}&mode=${mode}`);
+      const data = await res.json();
+      setNextQuestionCache(data);
+    } catch (err) {
+      console.error('Prefetch error:', err);
+    }
+  };
 
   useEffect(() => {
     if (isPaused) return;
@@ -164,19 +180,25 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     setFeedback(null);
     setDisabledOptions([]);
     
-    // Disable active event if it was Apollo (it only lasts 1 question usually, but let's clear all events after 1 question)
     if (activeEvent) {
       setActiveEvent(null);
     }
     
     try {
-      let difficulty = 'easy';
-      if (score > 1500 || currentCount > 20) difficulty = 'hard';
-      else if (score > 500 || currentCount > 10) difficulty = 'medium';
-
       const nextCount = currentCount + 1;
-      const res = await fetch(`${API_URL}/question?difficulty=${difficulty}&count=${nextCount}&mode=${mode}`);
-      const data = await res.json();
+      let data = nextQuestionCache;
+      
+      if (!data) {
+        let difficulty = 'easy';
+        if (score > 1500 || currentCount > 20) difficulty = 'hard';
+        else if (score > 500 || currentCount > 10) difficulty = 'medium';
+
+        const res = await fetch(`${API_URL}/question?difficulty=${difficulty}&count=${nextCount}&mode=${mode}`);
+        data = await res.json();
+      }
+      
+      // Clear cache once used
+      setNextQuestionCache(null);
       
       if (nextCount > 1 && nextCount % 10 === 4) {
         triggerRandomEvent();
@@ -226,6 +248,10 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
            }, 1500);
          } catch(e) {}
       }
+      
+      // Trigger prefetch for the next next question!
+      prefetchQuestion(nextCount, score);
+
     } catch (err) {
       console.error(err);
     } finally {
