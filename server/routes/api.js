@@ -4,6 +4,9 @@ const User = require('../models/User');
 const Leaderboard = require('../models/Leaderboard');
 const { generateQuestion, validateAnswer, useAthena, getCorrectAnswer } = require('../data/questions');
 
+// --- SYSTEM APIs --- //
+router.get('/health', (req, res) => res.json({ status: 'ok', message: 'API is running' }));
+
 // --- GAME APIs --- //
 
 // Get a random question based on difficulty (easy, medium, hard)
