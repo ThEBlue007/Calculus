@@ -171,7 +171,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
 
     setTimeout(() => {
       setEventAnnouncement(null);
-    }, 3000);
+    }, 1200);
   };
 
   const fetchNextQuestion = async (currentCount) => {
@@ -213,7 +213,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
         setIsShaking(true);
         setTimeout(() => setIsShaking(false), 800);
         setEventAnnouncement("DOUBLE TROUBLE!");
-        setTimeout(() => setEventAnnouncement(null), 3000);
+        setTimeout(() => setEventAnnouncement(null), 1200);
         
         if (mode === 'timeAttack') {
           setTimeLeft(prev => prev + 15);
@@ -314,7 +314,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
             setFeedback(null);
             setDisabledOptions([]);
             setEventAnnouncement("PHASE 2!");
-            setTimeout(() => setEventAnnouncement(null), 2000);
+            setTimeout(() => setEventAnnouncement(null), 1200);
           }, 600);
         } else {
           setTimeout(() => fetchNextQuestion(questionCount), 400); 
@@ -454,7 +454,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
           setFeedback(null);
           setDisabledOptions([]);
           setEventAnnouncement("PHASE 2!");
-          setTimeout(() => setEventAnnouncement(null), 2000);
+          setTimeout(() => setEventAnnouncement(null), 1200);
         }, 600);
       } else {
         setTimeout(() => fetchNextQuestion(questionCount), 600); 
@@ -567,7 +567,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
         )}
 
         {eventAnnouncement && (
-          <div className="absolute inset-0 pointer-events-none z-40 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="absolute inset-0 pointer-events-none z-40 flex flex-col items-center justify-center">
              <div className={`text-4xl sm:text-6xl font-black text-white px-8 py-6 border-y-8 animate-pop drop-shadow-2xl text-center leading-tight
                ${activeEvent === 'hades' ? 'border-purple-600 shadow-[0_0_50px_rgba(147,51,234,0.8)]' : ''}
                ${activeEvent === 'apollo' ? 'border-yellow-400 shadow-[0_0_50px_rgba(250,204,21,0.8)]' : ''}
