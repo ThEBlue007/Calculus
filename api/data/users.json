@@ -1,0 +1,15 @@
+{
+  "4b495260-840f-44ca-ae26-29b00ae0e7fe": {
+    "drachmas": 426,
+    "upgrades": {
+      "athena": 1,
+      "chronos": 1,
+      "hermes": 1
+    },
+    "relics": {
+      "midas": true,
+      "aegis": true,
+      "sandals": true
+    }
+  }
+}

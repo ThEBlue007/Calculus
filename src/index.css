@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-zigguratDark text-zigguratStone font-serif overflow-x-hidden touch-manipulation transition-colors duration-1000;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-black tracking-wider uppercase;
+  }
+}
+
+@layer components {
+  .stone-panel {
+    @apply bg-[#2c251d] border-4 border-zigguratStone/30 rounded shadow-[0_10px_30px_rgba(0,0,0,0.8)] relative;
+    /* Add a subtle texture/gradient to make it look like a stone slab */
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
+  }
+  
+  .ziggurat-btn {
+    @apply bg-[#1a1510] hover:bg-zigguratGold hover:text-[#1a1510] text-zigguratGold border-2 border-zigguratGold py-3 sm:py-4 px-6 rounded text-xl font-black uppercase tracking-widest transition-all active:scale-95 shadow-[0_0_15px_rgba(212,175,55,0.3)];
+  }
+}
