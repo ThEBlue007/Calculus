@@ -5,7 +5,6 @@ const { connectDB } = require('./config/db');
 const apiRoutes = require('./routes/api');
 
 connectDB();
-const apiRoutes = require('./routes/api');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
