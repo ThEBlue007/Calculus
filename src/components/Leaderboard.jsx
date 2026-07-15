@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BlockMath } from 'react-katex';
+import MathText from './MathText';
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
@@ -218,7 +219,7 @@ export default function Leaderboard({ score, stats = { maxStreak: 0, questionsAn
 
                   {item.explanation && (
                     <div className="text-sm text-[#e6e6fa] bg-[#4b0082]/30 p-3 rounded mt-2 border border-[#8a2be2]/30 leading-relaxed">
-                      <strong>💡 คำอธิบาย:</strong> {item.explanation}
+                      <strong>💡 คำอธิบาย:</strong> <MathText text={item.explanation} />
                     </div>
                   )}
                 </div>

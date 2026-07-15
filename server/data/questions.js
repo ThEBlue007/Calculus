@@ -21,7 +21,7 @@ function generateEasy() {
         math: `f(x) = x^{${n}}, f'(x) = ?`,
         correct: `${n}x^{${n-1}}`,
         wrongs: [`${n}x^{${n}}`, `${n-1}x^{${n}}`, `${n}x`],
-        explanation: `Power Rule: ตบกำลังลงมา แล้วลดกำลังลง 1 จะได้ ${n}x^{${n-1}}`
+        explanation: `Power Rule: ตบกำลังลงมา แล้วลดกำลังลง 1 จะได้ $${n}x^{${n-1}}$$`
       };
     },
     () => {
@@ -39,7 +39,7 @@ function generateEasy() {
         math: `f(x) = ${c}x^2, f'(x) = ?`,
         correct: `${c * 2}x`,
         wrongs: [`${c}x`, `${c * 2}x^2`, `2x`],
-        explanation: `Power Rule: ตบ 2 ลงมาคูณกับสัมประสิทธิ์ ${c} จะได้ ${c * 2}x`
+        explanation: `Power Rule: ตบ 2 ลงมาคูณกับสัมประสิทธิ์ $${c}$$ จะได้ $${c * 2}x$$`
       };
     }
   ];
@@ -54,7 +54,7 @@ function generateMedium() {
         math: `f(x) = ${a}x^4, f'(x) = ?`,
         correct: `${a * 4}x^3`,
         wrongs: [`${a}x^3`, `${a * 4}x^4`, `${a * 3}x^2`],
-        explanation: `Power Rule: ตบ 4 ลงมาคูณสัมประสิทธิ์ ${a} จะได้ ${a * 4}x^3`
+        explanation: `Power Rule: ตบ 4 ลงมาคูณสัมประสิทธิ์ $${a}$$ จะได้ $${a * 4}x^3$$`
       };
     },
     () => {
@@ -64,7 +64,7 @@ function generateMedium() {
         math: `f(x) = ${a}x^2 - ${b}x, f'(x) = ?`,
         correct: `${a * 2}x - ${b}`,
         wrongs: [`${a * 2}x - ${b}x`, `${a}x - ${b}`, `${a * 2}x^2 - ${b}`],
-        explanation: `กระจายดิฟทีละพจน์: พจน์หน้าได้ ${a*2}x และพจน์หลังได้ -${b}`
+        explanation: `กระจายดิฟทีละพจน์: พจน์หน้าได้ $${a*2}x$$ และพจน์หลังได้ $$-${b}$$`
       };
     },
     () => {
@@ -74,7 +74,7 @@ function generateMedium() {
         math: `f(x) = ${a}x^3 + ${b}x, f'(x) = ?`,
         correct: `${a * 3}x^2 + ${b}`,
         wrongs: [`${a * 3}x^2 + ${b}x`, `${a}x^2 + ${b}`, `${a * 3}x^3 + ${b}`],
-        explanation: `กระจายดิฟทีละพจน์: พจน์หน้าได้ ${a*3}x^2 และพจน์หลังได้ ${b}`
+        explanation: `กระจายดิฟทีละพจน์: พจน์หน้าได้ $${a*3}x^2$$ และพจน์หลังได้ $${b}$$`
       };
     },
     () => {
@@ -83,7 +83,7 @@ function generateMedium() {
         math: `f(x) = ${a}\\sqrt{x}, f'(x) = ?`,
         correct: `\\frac{${a}}{2\\sqrt{x}}`,
         wrongs: [`\\frac{${a}}{\\sqrt{x}}`, `\\frac{1}{2\\sqrt{x}}`, `${a}\\sqrt{x}`],
-        explanation: `Power Rule: เปลี่ยน \\sqrt{x} เป็น x^{1/2} ตบ 1/2 ลงมาคูณ ${a} จะได้ \\frac{${a}}{2}x^{-1/2} หรือ \\frac{${a}}{2\\sqrt{x}}`
+        explanation: `Power Rule: เปลี่ยน $$\\sqrt{x}$$ เป็น $$x^{1/2}$$ ตบ $$1/2$$ ลงมาคูณ $${a}$$ จะได้ $$\\frac{${a}}{2}x^{-1/2}$$ หรือ $$\\frac{${a}}{2\\sqrt{x}}$$`
       };
     }
   ];
@@ -99,7 +99,7 @@ function generateHard() {
         math: `f(x) = (${a}x + ${b})^3, f'(x) = ?`,
         correct: `3(${a}x + ${b})^2 \\cdot ${a}`,
         wrongs: [`3(${a}x + ${b})^2`, `(${a}x + ${b})^2 \\cdot ${a}`, `3(${a})^2`],
-        explanation: `Chain Rule: ตบกำลัง 3 ลงมาลดกำลัง 1 แล้วคูณด้วยดิฟไส้ใน (${a})`
+        explanation: `Chain Rule: ตบกำลัง 3 ลงมาลดกำลัง 1 แล้วคูณด้วยดิฟไส้ใน ($${a}$$)`
       };
     },
     () => {
@@ -108,7 +108,7 @@ function generateHard() {
         math: `f(x) = (x^2 + 1)^{${a}}, f'(x) = ?`,
         correct: `${a}(x^2 + 1)^{${a-1}} \\cdot 2x`,
         wrongs: [`${a}(x^2 + 1)^{${a-1}}`, `${a}(2x)^{${a-1}}`, `(x^2 + 1)^{${a-1}} \\cdot 2x`],
-        explanation: `Chain Rule: ตบกำลัง ${a} ลงมาลดกำลัง 1 แล้วคูณด้วยดิฟไส้ใน (2x)`
+        explanation: `Chain Rule: ตบกำลัง $${a}$$ ลงมาลดกำลัง 1 แล้วคูณด้วยดิฟไส้ใน ($$2x$$)`
       };
     },
     () => {
@@ -126,7 +126,7 @@ function generateHard() {
           `\\frac{${a*d + b*c}}{(${c}x + ${d})^2}`, 
           `\\frac{${a}x - ${c}}{(${c}x + ${d})^2}`
         ],
-        explanation: `Quotient Rule (ผลหาร): ล่างดิฟบน - บนดิฟล่าง ส่วนล่างกำลังสอง -> (${c}x+${d})(${a}) - (${a}x+${b})(${c}) ส่วน (${c}x+${d})^2 ได้ ${num}`
+        explanation: `Quotient Rule (ผลหาร): ล่างดิฟบน - บนดิฟล่าง ส่วนล่างกำลังสอง -> $$(${c}x+${d})(${a}) - (${a}x+${b})(${c})$$ ส่วน $$(${c}x+${d})^2$$ ได้ $$\\frac{${num}}{(${c}x + ${d})^2}$$`
       };
     },
     () => {
@@ -140,7 +140,7 @@ function generateHard() {
           `${a * 2}x^2 + ${a * b}`, 
           `${a}x(2x)`
         ],
-        explanation: `Product Rule หรือกระจายเป็น ${a}x^3 + ${a*b}x แล้วดิฟได้ ${a*3}x^2 + ${a*b}`
+        explanation: `Product Rule หรือกระจายเป็น $${a}x^3 + ${a*b}x$$ แล้วดิฟได้ $${a*3}x^2 + ${a*b}$$`
       };
     }
   ];
@@ -161,7 +161,7 @@ function generateBoss() {
           `x^${a} \\cdot 2(x + ${b})`, 
           `${a}x^{${a-1}} \\cdot 2(x + ${b})`
         ],
-        explanation: `Product Rule: หน้า(x^${a})ดิฟหลัง(2(x+${b})) + หลัง((x+${b})^2)ดิฟหน้า(${a}x^{${a-1}}) แล้วดึงตัวร่วม`
+        explanation: `Product Rule: หน้า($$x^${a}$$)ดิฟหลัง($$2(x+${b})$$) + หลัง($$(x+${b})^2$$)ดิฟหน้า($$${a}x^{${a-1}}$$) แล้วดึงตัวร่วม`
       };
     },
     // Higher-Order Derivative Boss
@@ -176,7 +176,7 @@ function generateBoss() {
           `${12 * a}x^2 - ${3 * b}x`,
           `${24 * a}x - ${6 * b}`
         ],
-        explanation: `Higher-Order: ดิฟครั้งที่ 1 ได้ ${4*a}x^3 - ${3*b}x^2 จากนั้นดิฟครั้งที่ 2 ต่อ`
+        explanation: `Higher-Order: ดิฟครั้งที่ 1 ได้ $${4*a}x^3 - ${3*b}x^2$$ จากนั้นดิฟครั้งที่ 2 ต่อ`
       };
     },
       // Nested Chain Rule Boss
@@ -192,7 +192,7 @@ function generateBoss() {
             `${3 * a}\\sqrt{${a}x + ${b}}`,
             `${coef}(${a}x + ${b})^2`
           ],
-          explanation: `Nested Chain: แปลงเป็น (${a}x+${b})^{3/2} ตบ 3/2 ลงมาเหลือ 1/2 (รูท) แล้วคูณดิฟไส้ (${a})`
+          explanation: `Nested Chain: แปลงเป็น $$(${a}x+${b})^{3/2}$$ ตบ $$3/2$$ ลงมาเหลือ $$1/2$$ (รูท) แล้วคูณดิฟไส้ ($${a}$$)`
         };
       },
       // Chain Rule with Negative Exponent Boss
@@ -207,7 +207,7 @@ function generateBoss() {
             `-\\frac{${2 * a}x}{(${a}x^2 + ${b})^3}`,
             `-\\frac{${4 * a}x}{(${a}x^2 + ${b})^2}`
           ],
-          explanation: `แปลงเป็น (${a}x^2+${b})^{-2} ตบ -2 ลงมาลดกำลังเป็น -3 แล้วคูณดิฟไส้ (2ax)`
+          explanation: `แปลงเป็น $$(${a}x^2+${b})^{-2}$$ ตบ $$-2$$ ลงมาลดกำลังเป็น $$-3$$ แล้วคูณดิฟไส้ ($$2ax$$)`
         };
       },
       // Kinematics Boss (Velocity)
@@ -224,7 +224,7 @@ function generateBoss() {
           `${ans - Math.floor(Math.random()*5 + 1)}`,
           `${a * Math.pow(t, 3) - b * Math.pow(t, 2)}`
         ],
-        explanation: `Velocity (ความเร็ว) คือ S'(t) = ${3*a}t^2 - ${2*b}t แล้วแทนค่า t=${t}`
+        explanation: `Velocity (ความเร็ว) คือ $$S'(t) = ${3*a}t^2 - ${2*b}t$$ แล้วแทนค่า $$t=${t}$$`
       };
     },
     // Kinematics Boss (Acceleration)
@@ -239,7 +239,7 @@ function generateBoss() {
           `${6 * a}t^2 + ${2 * b}t`,
           `${6 * a}t + ${b}`
         ],
-        explanation: `Acceleration (ความเร่ง) คือ S''(t) หรือดิฟสมการระยะทาง 2 ครั้ง`
+        explanation: `Acceleration (ความเร่ง) คือ $$S''(t)$$ หรือดิฟสมการระยะทาง 2 ครั้ง`
       };
     }
   ];
