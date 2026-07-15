@@ -201,18 +201,18 @@ export default function Leaderboard({ score, stats = { maxStreak: 0, questionsAn
                     </span>
                   </div>
                   <div className="text-white bg-[#1a1510] p-2 rounded mb-4 overflow-hidden border border-zigguratStone/20">
-                    <BlockMath math={item.math} />
+                    <BlockMath math={item.math.replace(/\\\\/g, '\\')} />
                   </div>
                   
                   {!item.isCorrect && (
                     <div className="text-sm mb-4">
                       <div className="text-red-300">
                         <span className="font-bold">Your Answer:</span>
-                        <div className="bg-red-900/30 p-2 mt-1 rounded"><BlockMath math={item.options[item.selectedAnswerIndex]} /></div>
+                        <div className="bg-red-900/30 p-2 mt-1 rounded"><BlockMath math={item.options[item.selectedAnswerIndex].replace(/\\\\/g, '\\')} /></div>
                       </div>
                       <div className="text-green-300 mt-2">
                         <span className="font-bold">Correct Answer:</span>
-                        <div className="bg-green-900/30 p-2 mt-1 rounded"><BlockMath math={item.options[item.correctAnswerIndex]} /></div>
+                        <div className="bg-green-900/30 p-2 mt-1 rounded"><BlockMath math={item.options[item.correctAnswerIndex].replace(/\\\\/g, '\\')} /></div>
                       </div>
                     </div>
                   )}

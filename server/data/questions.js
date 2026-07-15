@@ -259,7 +259,7 @@ async function generateQuestion(difficulty, count = 1, mode = 'timeAttack') {
     qData = isTimeAttack ? generateHard() : generateBoss();
     type = 'boss';
   } else if (difficulty === 'hard' && !isTimeAttack) {
-    qData = generateHard();
+    qData = Math.random() > 0.5 ? generateBoss() : generateHard();
   } else if (difficulty === 'medium' || (difficulty === 'hard' && isTimeAttack)) {
     qData = generateMedium();
   } else {

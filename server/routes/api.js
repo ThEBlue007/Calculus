@@ -99,7 +99,8 @@ router.post('/user/sync', async (req, res) => {
         username: userId,
         drachmas: 0,
         upgrades: { athena: 1, chronos: 1, hermes: 1, lhopital: 1 },
-        relics: { midas: false, aegis: false, sandals: false }
+        relics: [],
+        equippedRelics: []
       });
       await user.save();
     }
@@ -124,8 +125,8 @@ router.post('/user/reward', async (req, res) => {
       coins = Math.floor(score / 100);
       if (mode === 'tartarus') coins = Math.floor(coins * 1.5);
       
-      const relicsArray = user.relics || [];
-      const hasMidas = relicsArray.includes('midas');
+      const equippedArray = user.equippedRelics || [];
+      const hasMidas = equippedArray.includes('midas');
       if (hasMidas) {
         coins = Math.ceil(coins * 1.2);
       }
@@ -175,6 +176,40 @@ router.post('/user/upgrade', async (req, res) => {
 
     await user.save();
     res.json({ success: true, user });
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.post('/user/equip', async (req, res) => {
+  const { userId, relic } = req.body;
+  if (!userId || !relic) return res.status(400).json({ error: 'Missing data' });
+
+  try {
+    let user = await User.findOne({ username: userId });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    if (!user.relics) user.relics = [];
+    if (!user.equippedRelics) user.equippedRelics = [];
+
+    if (!user.relics.includes(relic)) {
+      return res.status(400).json({ error: 'You do not own this relic' });
+    }
+
+    const index = user.equippedRelics.indexOf(relic);
+    if (index > -1) {
+      // Unequip
+      user.equippedRelics.splice(index, 1);
+    } else {
+      // Equip (limit to 2 active relics)
+      if (user.equippedRelics.length >= 2) {
+        return res.status(400).json({ error: 'Can only equip 2 relics at a time' });
+      }
+      user.equippedRelics.push(relic);
+    }
+
+    await user.save();
+    res.json({ success: true, equippedRelics: user.equippedRelics });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }

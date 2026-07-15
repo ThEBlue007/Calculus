@@ -8,7 +8,8 @@ export const GameProvider = ({ children }) => {
   const [userId, setUserId] = useState(null);
   const [drachmas, setDrachmas] = useState(0);
   const [upgrades, setUpgrades] = useState({ athena: 1, chronos: 1, hermes: 1, lhopital: 1 });
-  const [relics, setRelics] = useState({ midas: false, aegis: false, sandals: false });
+  const [relics, setRelics] = useState([]);
+  const [equippedRelics, setEquippedRelics] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export const GameProvider = ({ children }) => {
         setDrachmas(data.drachmas || 0);
         if (data.upgrades) setUpgrades(data.upgrades);
         if (data.relics) setRelics(data.relics);
+        if (data.equippedRelics) setEquippedRelics(data.equippedRelics);
       }
     } catch (err) {
       console.error('Failed to sync user', err);
@@ -80,8 +82,27 @@ export const GameProvider = ({ children }) => {
     }
   };
 
+  const toggleEquipRelic = async (relic) => {
+    try {
+      const res = await fetch(`${API_URL}/user/equip`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, relic })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setEquippedRelics(data.equippedRelics);
+        return { success: true };
+      }
+      return { success: false, error: data.error };
+    } catch (err) {
+      console.error('Failed to toggle relic', err);
+      return { success: false, error: 'Server error' };
+    }
+  };
+
   return (
-    <GameContext.Provider value={{ userId, drachmas, upgrades, relics, loading, rewardUser, buyUpgrade }}>
+    <GameContext.Provider value={{ userId, drachmas, upgrades, relics, equippedRelics, loading, rewardUser, buyUpgrade, toggleEquipRelic }}>
       {children}
     </GameContext.Provider>
   );

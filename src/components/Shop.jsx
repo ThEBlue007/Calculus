@@ -2,13 +2,24 @@ import { useContext } from 'react';
 import { GameContext } from '../context/GameContext';
 
 export default function Shop({ onBack }) {
-  const { drachmas, upgrades, relics, buyUpgrade } = useContext(GameContext);
+  const { drachmas, upgrades, relics = [], equippedRelics = [], buyUpgrade, toggleEquipRelic } = useContext(GameContext);
+
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const handleBuy = async (skill, cost, isRelic = false) => {
+    setErrorMsg(null);
     if (isRelic) {
-      if (drachmas >= cost && !relics[skill]) await buyUpgrade(skill);
+      if (drachmas >= cost && !relics.includes(skill)) await buyUpgrade(skill);
     } else {
       if (drachmas >= 500 && (upgrades[skill] || 1) < 2) await buyUpgrade(skill);
+    }
+  };
+
+  const handleToggleEquip = async (relicId) => {
+    setErrorMsg(null);
+    const res = await toggleEquipRelic(relicId);
+    if (!res.success) {
+      setErrorMsg(res.error);
     }
   };
 
@@ -68,12 +79,18 @@ export default function Shop({ onBack }) {
   ];
 
   return (
-    <div className="w-full max-w-2xl stone-panel p-6 sm:p-8 font-sans text-center">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl sm:text-4xl font-black ziggurat-title">DRACHMA SHOP</h2>
-        <div className="text-2xl font-bold text-zigguratGold bg-black/40 px-4 py-2 rounded-full border border-zigguratGold/30">
-          🪙 {drachmas}
+    <div className="absolute inset-0 bg-zigguratDark text-center p-4 sm:p-8 overflow-y-auto w-full h-full pb-20">
+      <div className="max-w-2xl mx-auto flex flex-col items-center">
+        <h2 className="text-3xl sm:text-5xl font-black mb-2 text-zigguratGold tracking-widest ziggurat-title drop-shadow-md">SHOP</h2>
+        <div className="text-xl sm:text-2xl text-yellow-300 font-bold mb-6 flex items-center justify-center bg-black/40 px-6 py-2 rounded-full border border-yellow-500/30">
+          YOUR DRACHMAS: <span className="ml-3 text-3xl">{drachmas} 🪙</span>
         </div>
+        
+        {errorMsg && (
+          <div className="text-red-400 bg-red-900/40 px-4 py-2 rounded border border-red-500/50 mb-4 animate-shake">
+            {errorMsg}
+          </div>
+        )}
       </div>
       
       <p className="text-zigguratStone/80 mb-8 italic">
@@ -126,8 +143,22 @@ export default function Shop({ onBack }) {
             </div>
             
             <div className="mt-auto w-full">
-              {relics[relic.id] ? (
-                <div className="text-blue-400 font-bold uppercase tracking-widest text-sm bg-blue-900/20 py-2 rounded border border-blue-500/30">EQUIPPED</div>
+              {relics.includes(relic.id) ? (
+                equippedRelics.includes(relic.id) ? (
+                  <button 
+                    onClick={() => handleToggleEquip(relic.id)}
+                    className="w-full py-2 rounded font-bold uppercase tracking-wider text-sm transition-all bg-yellow-500 text-yellow-900 hover:bg-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.5)] border border-yellow-300"
+                  >
+                    UNEQUIP
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => handleToggleEquip(relic.id)}
+                    className="w-full py-2 rounded font-bold uppercase tracking-wider text-sm transition-all bg-[#2a221b] text-zigguratStone hover:bg-[#3a3026] border border-zigguratStone/40"
+                  >
+                    EQUIP
+                  </button>
+                )
               ) : (
                 <button 
                   onClick={() => handleBuy(relic.id, relic.cost, true)}

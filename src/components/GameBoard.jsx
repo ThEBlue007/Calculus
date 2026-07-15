@@ -8,10 +8,10 @@ const API_URL = import.meta.env.VITE_API_URL || '/api';
 const MAX_TIME = 60;
 
 export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
-  const { drachmas, upgrades, relics, rewardUser } = useContext(GameContext);
+  const { upgrades, equippedRelics, rewardUser } = useContext(GameContext);
 
-  const [timeLeft, setTimeLeft] = useState(MAX_TIME);
-  const [hearts, setHearts] = useState((mode === 'tartarus' && relics?.aegis) ? 4 : 3);
+  const [timeLeft, setTimeLeft] = useState(mode === 'tartarus' ? 0 : MAX_TIME);
+  const [hearts, setHearts] = useState((mode === 'tartarus' && equippedRelics?.includes('aegis')) ? 4 : 3);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
@@ -178,16 +178,27 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
   };
 
   const fetchNextQuestion = async (currentCount) => {
-    setLoading(true);
-    setSelectedAnswer(null);
-    setFeedback(null);
-    setDisabledOptions([]);
-    
-    if (activeEvent) {
-      setActiveEvent(null);
-    }
-    
+    if (isPaused) return;
+
+    // We can use a ref to track if this component is still fetching the *current* question
+    const fetchId = Date.now();
+    isAnsweringRef.current = fetchId;
+
     try {
+      setLoading(true);
+      setSelectedAnswer(null);
+      setFeedback(null);
+      setDisabledOptions([]);
+      
+      // Clear all event-related states instantly
+      setApolloReveal(false);
+      setApolloTargetIndex(null);
+      setEventAnnouncement(null);
+      
+      if (activeEvent) {
+        setActiveEvent(null);
+      }
+      
       const nextCount = currentCount + 1;
       let data = nextQuestionCache;
       
@@ -223,7 +234,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
           setTimeLeft(prev => prev + 15);
           setFloatingPoints(prev => ({ text: '+15s', id: prev.id + 1 }));
         } else {
-          setHearts(prev => Math.min(relics?.aegis ? 4 : 3, prev + 1));
+          setHearts(prev => Math.min(equippedRelics?.includes('aegis') ? 4 : 3, prev + 1));
           setFloatingPoints(prev => ({ text: '+1 ❤️', id: prev.id + 1 }));
         }
       } else if (data.type === 'boss') {
@@ -244,12 +255,18 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
              body: JSON.stringify({ id: data.id })
            });
            const apolloData = await apolloRes.json();
-           setApolloTargetIndex(apolloData.correctIndex);
-           setApolloReveal(true);
-           setTimeout(() => {
-             setApolloReveal(false);
-             setApolloTargetIndex(null);
-           }, 1200);
+           
+           // Only reveal if we are still on the same question request!
+           if (isAnsweringRef.current === fetchId) {
+             setApolloTargetIndex(apolloData.correctIndex);
+             setApolloReveal(true);
+             setTimeout(() => {
+               if (isAnsweringRef.current === fetchId) {
+                 setApolloReveal(false);
+                 setApolloTargetIndex(null);
+               }
+             }, 1200);
+           }
          } catch(e) {}
       }
       
@@ -279,8 +296,8 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
       const data = await res.json();
       
       const historyEntry = {
-        math: question.math,
-        options: question.options,
+        math: question.math.replace(/\\\\/g, '\\'),
+        options: question.options.map(opt => opt.replace(/\\\\/g, '\\')),
         selectedAnswerIndex: index,
         correctAnswerIndex: data.correctAnswerIndex,
         explanation: data.explanation,
@@ -367,7 +384,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
         } else {
            const penaltyBase = question.isBoss ? 6 : 3;
            const zeusPenaltyMult = activeEvent === 'zeus' ? 2 : 1;
-           const penalty = (penaltyBase * zeusPenaltyMult) - (relics?.sandals ? 1 : 0);
+           const penalty = (penaltyBase * zeusPenaltyMult) - (equippedRelics?.includes('sandals') ? 1 : 0);
            
            setFloatingPoints(prev => ({ text: `-${penalty}s`, id: prev.id + 1 }));
            setIsShaking(true);
@@ -452,8 +469,8 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
       if (hermesCharges > 0) setHermesCharges(prev => prev - 1);
 
       const historyEntry = {
-        math: question.math,
-        options: question.options,
+        math: question.math.replace(/\\\\/g, '\\'),
+        options: question.options.map(opt => opt.replace(/\\\\/g, '\\')),
         selectedAnswerIndex: data.correctIndex,
         correctAnswerIndex: data.correctIndex,
         explanation: "ใช้ L'Hôpital's Secret ข้ามข้อนี้",
@@ -537,11 +554,6 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     return "text-3xl sm:text-5xl";
   };
 
-  const timePct = (timeLeft / MAX_TIME) * 100;
-  let barColor = "bg-zigguratGold";
-  if (timePct < 20) barColor = "bg-zigguratTerracotta animate-pulse-fast";
-  else if (timePct < 50) barColor = "bg-yellow-600";
-
   return (
     <div className="w-full flex justify-center px-2 relative min-h-[80vh]">
       {mode === 'timeAttack' && timeLeft <= 10 && (
@@ -615,25 +627,24 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
         )}
 
         <div>
-          {mode === 'timeAttack' ? (
-            <div className="absolute top-0 left-0 w-full h-2 sm:h-3 bg-black/50 border-b border-zigguratStone/20">
-              <div 
-                className={`h-full transition-all duration-1000 ease-linear ${barColor}`} 
-                style={{ width: `${timePct}%` }}
-              />
-            </div>
-          ) : (
-            <div className="absolute top-0 left-0 w-full flex justify-center mt-2 space-x-2">
-               {[...Array(relics?.aegis ? 4 : 3)].map((_, idx) => {
-                 const i = idx + 1;
-                 return (
-                   <span key={i} className={`text-2xl transition-all ${i <= hearts ? 'text-red-500 drop-shadow-[0_0_8px_rgba(255,0,0,0.8)] scale-110 animate-pulse' : 'text-gray-700 opacity-50 scale-90'}`}>
-                     ❤️
-                   </span>
-                 );
-               })}
-            </div>
-          )}
+          <div className="absolute top-0 left-0 w-full flex justify-center mt-2">
+            {mode === 'tartarus' ? (
+              <div className="text-xl sm:text-2xl font-bold text-red-500 bg-[#2a0808] px-3 sm:px-4 py-1 sm:py-2 rounded-full border border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+                {hearts > 0 ? (
+                  <div className="flex space-x-1">
+                    {[...Array(hearts)].map((_, i) => <span key={i}>❤️</span>)}
+                  </div>
+                ) : (
+                  <span>💀</span>
+                )}
+              </div>
+            ) : (
+              <div className={`text-xl sm:text-2xl font-bold bg-[#1a1510] px-3 sm:px-4 py-1 sm:py-2 rounded-full border shadow-inner ${timeLeft <= 10 ? 'text-red-500 border-red-500/50 animate-pulse' : 'text-zigguratStone border-zigguratStone/30'}`}>
+                <span className="opacity-50 text-sm sm:text-base mr-2">⏳</span>
+                {timeLeft}s
+              </div>
+            )}
+          </div>
 
           {floatingPoints.text && (
             <div key={floatingPoints.id} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
@@ -704,13 +715,32 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
 
           {/* Hades Blur Effect */}
           <div className={`min-h-[100px] sm:min-h-[140px] flex items-center justify-center rounded border-2 mb-4 sm:mb-6 p-2 sm:p-4 shadow-inner relative w-full overflow-hidden ${question?.isBoss ? 'bg-[#2a0808] border-zigguratTerracotta/50' : 'bg-[#1a1510] border-zigguratStone/20'} ${activeEvent === 'hades' ? 'blur-[2px] animate-shake' : ''}`}>
+            
+            {mode === 'tartarus' ? (
+              <div className="absolute top-0 left-0 w-full flex justify-center mt-2 space-x-2">
+                {[...Array(equippedRelics?.includes('aegis') ? 4 : 3)].map((_, idx) => {
+                  const i = idx + 1;
+                  return (
+                    <div key={i} className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full ${i <= hearts ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]' : 'bg-red-900/30'}`}></div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="absolute top-0 left-0 w-full h-1 sm:h-2 bg-black/40">
+                <div 
+                  className={`h-full transition-all duration-1000 ${timeLeft <= 10 ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]' : 'bg-zigguratGold shadow-[0_0_10px_rgba(226,176,81,0.5)]'}`} 
+                  style={{ width: `${(timeLeft / MAX_TIME) * 100}%` }}
+                ></div>
+              </div>
+            )}
+
             {loading || !question ? (
               <span className="text-zigguratStone/50 animate-pulse font-serif italic text-xl">Inscribing tablet...</span>
             ) : isPaused ? (
               <span className="text-zigguratStone/50 font-black tracking-widest text-xl">HIDDEN</span>
             ) : (
               <div className={`drop-shadow-md text-white max-w-full overflow-hidden flex justify-center items-center ${getMathSizeClass()}`}>
-                <BlockMath math={question.math} />
+                <BlockMath math={question.math.replace(/\\\\/g, '\\')} />
               </div>
             )}
           </div>
@@ -757,7 +787,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
                   style={{ minHeight: question?.isBoss ? '60px' : '80px' }}
                 >
                   <div className="flex items-center justify-center overflow-x-auto scrollbar-hide py-1">
-                    {isPaused ? <span className="text-white/20">?</span> : <BlockMath math={opt} />}
+                    {isPaused ? <span className="text-white/20">?</span> : <BlockMath math={opt.replace(/\\\\/g, '\\')} />}
                   </div>
                 </button>
               );
