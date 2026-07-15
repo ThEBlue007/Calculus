@@ -321,12 +321,12 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
             setEventAnnouncement("PHASE 2!");
             setTimeout(() => setEventAnnouncement(null), 1200);
             isAnsweringRef.current = false;
-          }, 600);
+          }, 500);
         } else {
           setTimeout(() => {
             isAnsweringRef.current = false;
             fetchNextQuestion(questionCount);
-          }, 1500);
+          }, 500);
         }
       } else {
         playSound('wrong');
@@ -347,7 +347,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
            setTimeout(() => setIsFlashing(false), 500);
 
            if (newHearts === 0) {
-             setTimeout(() => onGameOver(score, { maxStreak, questionsAnswered: questionCount - 1 }, history), 600);
+             setTimeout(() => onGameOver(score, { maxStreak, questionsAnswered: questionCount - 1 }, history), 500);
            } else {
              if (question.twin) {
                setTimeout(() => {
@@ -356,12 +356,12 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
                  setFeedback(null);
                  setDisabledOptions([]);
                  isAnsweringRef.current = false;
-               }, 600);
+               }, 500);
              } else {
                setTimeout(() => {
                  isAnsweringRef.current = false;
                  fetchNextQuestion(questionCount);
-               }, 1500);
+               }, 500);
              }
            }
         } else {
@@ -378,7 +378,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
            setTimeLeft(prev => {
              const newTime = Math.max(0, prev - penalty);
              if (newTime === 0) {
-               setTimeout(() => onGameOver(score, { maxStreak, questionsAnswered: questionCount - 1 }, history), 600);
+               setTimeout(() => onGameOver(score, { maxStreak, questionsAnswered: questionCount - 1 }, history), 500);
              } else {
                if (question.twin) {
                  setTimeout(() => {
@@ -387,12 +387,12 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
                    setFeedback(null);
                    setDisabledOptions([]);
                    isAnsweringRef.current = false;
-                 }, 600);
+                 }, 500);
                } else {
                  setTimeout(() => {
                    isAnsweringRef.current = false;
                    fetchNextQuestion(questionCount);
-                 }, 1500);
+                 }, 500);
                }
              }
              return newTime;
