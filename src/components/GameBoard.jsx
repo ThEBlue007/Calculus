@@ -53,6 +53,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
   const heartbeatRef = useRef(null);
   const isZeusActiveRef = useRef(false);
   const isAnsweringRef = useRef(false);
+  const currentQuestionIdRef = useRef(null);
 
   useEffect(() => {
     startBackgroundMusic();
@@ -182,7 +183,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
 
     // We can use a ref to track if this component is still fetching the *current* question
     const fetchId = Date.now();
-    isAnsweringRef.current = fetchId;
+    currentQuestionIdRef.current = fetchId;
 
     try {
       setLoading(true);
@@ -257,11 +258,11 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
            const apolloData = await apolloRes.json();
            
            // Only reveal if we are still on the same question request!
-           if (isAnsweringRef.current === fetchId) {
+           if (currentQuestionIdRef.current === fetchId) {
              setApolloTargetIndex(apolloData.correctIndex);
              setApolloReveal(true);
              setTimeout(() => {
-               if (isAnsweringRef.current === fetchId) {
+               if (currentQuestionIdRef.current === fetchId) {
                  setApolloReveal(false);
                  setApolloTargetIndex(null);
                }
