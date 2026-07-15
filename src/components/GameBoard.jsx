@@ -140,7 +140,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     if (floatingPoints.text) {
       const timer = setTimeout(() => {
         setFloatingPoints(prev => ({ ...prev, text: null }));
-      }, 1500);
+      }, 1200);
       return () => clearTimeout(timer);
     }
   }, [floatingPoints.id, floatingPoints.text]);
@@ -249,7 +249,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
            setTimeout(() => {
              setApolloReveal(false);
              setApolloTargetIndex(null);
-           }, 1500);
+           }, 1200);
          } catch(e) {}
       }
       
@@ -321,12 +321,12 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
             setEventAnnouncement("PHASE 2!");
             setTimeout(() => setEventAnnouncement(null), 1200);
             isAnsweringRef.current = false;
-          }, 500);
+          }, 200);
         } else {
           setTimeout(() => {
             isAnsweringRef.current = false;
             fetchNextQuestion(questionCount);
-          }, 500);
+          }, 200);
         }
       } else {
         playSound('wrong');
@@ -344,10 +344,10 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
            setIsShaking(true);
            setIsFlashing(true);
            setTimeout(() => setIsShaking(false), 400);
-           setTimeout(() => setIsFlashing(false), 500);
+           setTimeout(() => setIsFlashing(false), 200);
 
            if (newHearts === 0) {
-             setTimeout(() => onGameOver(score, { maxStreak, questionsAnswered: questionCount - 1 }, history), 500);
+             setTimeout(() => onGameOver(score, { maxStreak, questionsAnswered: questionCount - 1 }, history), 200);
            } else {
              if (question.twin) {
                setTimeout(() => {
@@ -356,12 +356,12 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
                  setFeedback(null);
                  setDisabledOptions([]);
                  isAnsweringRef.current = false;
-               }, 500);
+               }, 200);
              } else {
                setTimeout(() => {
                  isAnsweringRef.current = false;
                  fetchNextQuestion(questionCount);
-               }, 500);
+               }, 200);
              }
            }
         } else {
@@ -373,12 +373,12 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
            setIsShaking(true);
            setIsFlashing(true);
            setTimeout(() => setIsShaking(false), 400);
-           setTimeout(() => setIsFlashing(false), 500);
+           setTimeout(() => setIsFlashing(false), 200);
 
            setTimeLeft(prev => {
              const newTime = Math.max(0, prev - penalty);
              if (newTime === 0) {
-               setTimeout(() => onGameOver(score, { maxStreak, questionsAnswered: questionCount - 1 }, history), 500);
+               setTimeout(() => onGameOver(score, { maxStreak, questionsAnswered: questionCount - 1 }, history), 200);
              } else {
                if (question.twin) {
                  setTimeout(() => {
@@ -387,12 +387,12 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
                    setFeedback(null);
                    setDisabledOptions([]);
                    isAnsweringRef.current = false;
-                 }, 500);
+                 }, 200);
                } else {
                  setTimeout(() => {
                    isAnsweringRef.current = false;
                    fetchNextQuestion(questionCount);
-                 }, 500);
+                 }, 200);
                }
              }
              return newTime;
@@ -421,7 +421,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
         if (data.disabled) {
           setDisabledOptions(data.disabled);
           setActiveGod('athena');
-          setTimeout(() => setActiveGod(null), 1500);
+          setTimeout(() => setActiveGod(null), 1200);
         }
     })
     .catch(console.error);
@@ -442,7 +442,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
       if (data.error) throw new Error(data.error);
 
       setActiveGod('lhopital');
-      setTimeout(() => setActiveGod(null), 1500);
+      setTimeout(() => setActiveGod(null), 1200);
 
       // Auto-solve but 0 points
       setSelectedAnswer(data.correctIndex);
@@ -473,9 +473,9 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
           setDisabledOptions([]);
           setEventAnnouncement("PHASE 2!");
           setTimeout(() => setEventAnnouncement(null), 1200);
-        }, 600);
+        }, 200);
       } else {
-        setTimeout(() => fetchNextQuestion(questionCount), 600); 
+        setTimeout(() => fetchNextQuestion(questionCount), 200); 
       }
     } catch(err) {
       console.error(err);
@@ -499,7 +499,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     }
     
     setActiveGod('chronos');
-    setTimeout(() => setActiveGod(null), 1500);
+    setTimeout(() => setActiveGod(null), 1200);
     
     setIsSuccessFlashing(true);
     setTimeout(() => setIsSuccessFlashing(false), 400);
@@ -512,7 +512,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     setHermesCharges(3);
     
     setActiveGod('hermes');
-    setTimeout(() => setActiveGod(null), 1500);
+    setTimeout(() => setActiveGod(null), 1200);
     
     const mult = upgrades.hermes === 2 ? 5 : 3;
     setFloatingPoints(prev => ({ text: `${mult}x SCORE!`, id: prev.id + 1 }));
