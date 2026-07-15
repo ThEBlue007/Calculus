@@ -48,18 +48,25 @@ function generateEasy() {
 
 function generateMedium() {
   const templates = [
-    () => ({
-      math: `f(x) = \\sin x, f'(x) = ?`,
-      correct: `\\cos x`,
-      wrongs: [`-\\cos x`, `-\\sin x`, `\\csc x`],
-      explanation: `กฎตรีโกณมิติพื้นฐาน: d/dx(\\sin x) = \\cos x`
-    }),
-    () => ({
-      math: `f(x) = \\cos x, f'(x) = ?`,
-      correct: `-\\sin x`,
-      wrongs: [`\\sin x`, `-\\cos x`, `\\sec x`],
-      explanation: `กฎตรีโกณมิติพื้นฐาน: d/dx(\\cos x) = -\\sin x`
-    }),
+    () => {
+      const a = Math.floor(Math.random() * 5) + 2;
+      return {
+        math: `f(x) = ${a}x^4, f'(x) = ?`,
+        correct: `${a * 4}x^3`,
+        wrongs: [`${a}x^3`, `${a * 4}x^4`, `${a * 3}x^2`],
+        explanation: `Power Rule: ตบ 4 ลงมาคูณสัมประสิทธิ์ ${a} จะได้ ${a * 4}x^3`
+      };
+    },
+    () => {
+      const a = Math.floor(Math.random() * 8) + 2;
+      const b = Math.floor(Math.random() * 5) + 2;
+      return {
+        math: `f(x) = ${a}x^2 - ${b}x, f'(x) = ?`,
+        correct: `${a * 2}x - ${b}`,
+        wrongs: [`${a * 2}x - ${b}x`, `${a}x - ${b}`, `${a * 2}x^2 - ${b}`],
+        explanation: `กระจายดิฟทีละพจน์: พจน์หน้าได้ ${a*2}x และพจน์หลังได้ -${b}`
+      };
+    },
     () => {
       const a = Math.floor(Math.random() * 5) + 2;
       const b = Math.floor(Math.random() * 5) + 2;
@@ -87,11 +94,12 @@ function generateHard() {
   const templates = [
     () => {
       const a = Math.floor(Math.random() * 5) + 2;
+      const b = Math.floor(Math.random() * 4) + 2;
       return {
-        math: `f(x) = \\sin(${a}x), f'(x) = ?`,
-        correct: `${a}\\cos(${a}x)`,
-        wrongs: [`\\cos(${a}x)`, `-${a}\\cos(${a}x)`, `\\sin(${a}x)`],
-        explanation: `Chain Rule: ดิฟนอกได้ \\cos(${a}x) แล้วคูณดิฟไส้ใน ${a}x ได้ ${a}`
+        math: `f(x) = (${a}x + ${b})^3, f'(x) = ?`,
+        correct: `3(${a}x + ${b})^2 \\cdot ${a}`,
+        wrongs: [`3(${a}x + ${b})^2`, `(${a}x + ${b})^2 \\cdot ${a}`, `3(${a})^2`],
+        explanation: `Chain Rule: ตบกำลัง 3 ลงมาลดกำลัง 1 แล้วคูณด้วยดิฟไส้ใน (${a})`
       };
     },
     () => {
@@ -103,18 +111,24 @@ function generateHard() {
         explanation: `Chain Rule: ตบกำลัง ${a} ลงมาลดกำลัง 1 แล้วคูณด้วยดิฟไส้ใน (2x)`
       };
     },
-    () => ({
-      math: `f(x) = x \\sin x, f'(x) = ?`,
-      correct: `\\sin x + x \\cos x`,
-      wrongs: [`\\cos x`, `x \\cos x`, `\\sin x - x \\cos x`],
-      explanation: `Product Rule: หน้าดิฟหลัง (x\\cos x) + หลังดิฟหน้า (\\sin x \\cdot 1)`
-    }),
-    () => ({
-      math: `f(x) = 1/x, f'(x) = ?`,
-      correct: `-1/x^2`,
-      wrongs: [`1/x^2`, `\\ln|x|`, `-1/x`],
-      explanation: `แปลง 1/x เป็น x^{-1} แล้วใช้ Power Rule จะได้ -1x^{-2} หรือ -1/x^2`
-    })
+    () => {
+      const a = Math.floor(Math.random() * 4) + 2;
+      return {
+        math: `f(x) = \\frac{${a}}{x^2}, f'(x) = ?`,
+        correct: `-\\frac{${a * 2}}{x^3}`,
+        wrongs: [`\\frac{${a * 2}}{x^3}`, `-\\frac{${a}}{x^3}`, `\\frac{${a}}{2x}`],
+        explanation: `แปลงเป็น ${a}x^{-2} ใช้ Power Rule จะได้ -${a*2}x^{-3} หรือ -\\frac{${a*2}}{x^3}`
+      };
+    },
+    () => {
+      const a = Math.floor(Math.random() * 3) + 2;
+      return {
+        math: `f(x) = ${a}x(x^2 + 1), f'(x) = ?`,
+        correct: `${a}(3x^2 + 1)`,
+        wrongs: [`${a}(x^2 + 1)`, `${a}(2x^2 + 1)`, `${a}x(2x)`],
+        explanation: `Product Rule หรือกระจายเป็น ${a}x^3 + ${a}x แล้วดิฟได้ ${a*3}x^2 + ${a} ดึงตัวร่วม ${a} ออก`
+      };
+    }
   ];
   return templates[Math.floor(Math.random() * templates.length)]();
 }
@@ -123,17 +137,17 @@ function generateBoss() {
   const templates = [
     // Standard Hard Boss (Product Rule + Chain Rule)
     () => {
-      const a = Math.floor(Math.random() * 4) + 2; // 2 to 5
-      const b = Math.floor(Math.random() * 4) + 2;
+      const a = Math.floor(Math.random() * 3) + 2; // 2 to 4
+      const b = Math.floor(Math.random() * 3) + 2;
       return {
-        math: `f(x) = x^${a} \\sin(${b}x), f'(x) = ?`,
-        correct: `x^{${a-1}}(${a}\\sin(${b}x) + ${b}x\\cos(${b}x))`,
+        math: `f(x) = x^${a}(x + ${b})^2, f'(x) = ?`,
+        correct: `x^{${a-1}}(x + ${b})((${a+2})x + ${a*b})`,
         wrongs: [
-          `${a}x^{${a-1}}\\cos(${b}x)`, 
-          `${a}x^{${a-1}}\\sin(${b}x) - ${b}x^${a}\\cos(${b}x)`, 
-          `x^{${a-1}}(${b}\\sin(${a}x) + ${a}x\\cos(${b}x))`
+          `${a}x^{${a-1}}(x + ${b})^2`, 
+          `x^${a} \\cdot 2(x + ${b})`, 
+          `${a}x^{${a-1}} \\cdot 2(x + ${b})`
         ],
-        explanation: `Product + Chain: หน้า(x^${a})ดิฟหลัง(${b}\\cos(${b}x)) + หลัง(\\sin(${b}x))ดิฟหน้า(${a}x^{${a-1}})`
+        explanation: `Product Rule: หน้า(x^${a})ดิฟหลัง(2(x+${b})) + หลัง((x+${b})^2)ดิฟหน้า(${a}x^{${a-1}}) แล้วดึงตัวร่วม`
       };
     },
     // Higher-Order Derivative Boss
