@@ -52,6 +52,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
   const timerRef = useRef(null);
   const heartbeatRef = useRef(null);
   const isZeusActiveRef = useRef(false);
+  const isAnsweringRef = useRef(false);
 
   useEffect(() => {
     startBackgroundMusic();
@@ -76,7 +77,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
 
   useEffect(() => {
     // Pause timer if paused by user, or if an event/god animation is playing!
-    if (isPaused || activeGod || eventAnnouncement) return;
+    if (isPaused || activeGod || eventAnnouncement || showMinigame) return;
     
     if (mode === 'timeAttack') {
       timerRef.current = setInterval(() => {
@@ -91,7 +92,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isPaused, activeGod, eventAnnouncement, mode]);
+  }, [isPaused, activeGod, eventAnnouncement, mode, showMinigame]);
 
   // Sync ref for zeus event to be used in setInterval
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
 
   // Heartbeat Effect
   useEffect(() => {
-    if (isPaused) {
+    if (isPaused || showMinigame) {
        if (heartbeatRef.current) {
          clearInterval(heartbeatRef.current);
          heartbeatRef.current = null;
@@ -120,7 +121,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
         heartbeatRef.current = null;
       }
     }
-  }, [timeLeft, mode, isPaused]);
+  }, [timeLeft, mode, isPaused, showMinigame]);
 
   useEffect(() => {
     if (mode === 'timeAttack' && timeLeft <= 0) {
@@ -261,9 +262,10 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
   };
 
   const handleAnswer = async (index) => {
-    if (isPaused || selectedAnswer !== null || !question) return;
+    if (isPaused || selectedAnswer !== null || !question || isAnsweringRef.current) return;
     if (disabledOptions.includes(index)) return;
     
+    isAnsweringRef.current = true;
     setSelectedAnswer(index);
     
     try {
@@ -316,9 +318,13 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
             setDisabledOptions([]);
             setEventAnnouncement("PHASE 2!");
             setTimeout(() => setEventAnnouncement(null), 1200);
+            isAnsweringRef.current = false;
           }, 600);
         } else {
-          setTimeout(() => fetchNextQuestion(questionCount), 400); 
+          setTimeout(() => {
+            isAnsweringRef.current = false;
+            fetchNextQuestion(questionCount);
+          }, 1500);
         }
       } else {
         playSound('wrong');
@@ -347,9 +353,13 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
                  setSelectedAnswer(null);
                  setFeedback(null);
                  setDisabledOptions([]);
+                 isAnsweringRef.current = false;
                }, 600);
              } else {
-               setTimeout(() => fetchNextQuestion(questionCount), 600);
+               setTimeout(() => {
+                 isAnsweringRef.current = false;
+                 fetchNextQuestion(questionCount);
+               }, 1500);
              }
            }
         } else {
@@ -374,9 +384,13 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
                    setSelectedAnswer(null);
                    setFeedback(null);
                    setDisabledOptions([]);
+                   isAnsweringRef.current = false;
                  }, 600);
                } else {
-                 setTimeout(() => fetchNextQuestion(questionCount), 600);
+                 setTimeout(() => {
+                   isAnsweringRef.current = false;
+                   fetchNextQuestion(questionCount);
+                 }, 1500);
                }
              }
              return newTime;
@@ -385,7 +399,8 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
       }
     } catch (err) {
       console.error(err);
-      fetchNextQuestion(questionCount);
+      isAnsweringRef.current = false;
+      setSelectedAnswer(null);
     }
   };
 
