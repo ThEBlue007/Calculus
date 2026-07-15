@@ -112,21 +112,35 @@ function generateHard() {
       };
     },
     () => {
+      // Quotient Rule: f(x) = (ax + b) / (cx + d)
       const a = Math.floor(Math.random() * 4) + 2;
+      const b = Math.floor(Math.random() * 4) + 1;
+      const c = Math.floor(Math.random() * 4) + 2;
+      const d = Math.floor(Math.random() * 4) + 1;
+      const num = a * d - b * c;
       return {
-        math: `f(x) = \\frac{${a}}{x^2}, f'(x) = ?`,
-        correct: `-\\frac{${a * 2}}{x^3}`,
-        wrongs: [`\\frac{${a * 2}}{x^3}`, `-\\frac{${a}}{x^3}`, `\\frac{${a}}{2x}`],
-        explanation: `แปลงเป็น ${a}x^{-2} ใช้ Power Rule จะได้ -${a*2}x^{-3} หรือ -\\frac{${a*2}}{x^3}`
+        math: `f(x) = \\frac{${a}x + ${b}}{${c}x + ${d}}, f'(x) = ?`,
+        correct: `\\frac{${num}}{(${c}x + ${d})^2}`,
+        wrongs: [
+          `\\frac{${a}}{${c}}`, 
+          `\\frac{${a*d + b*c}}{(${c}x + ${d})^2}`, 
+          `\\frac{${a}x - ${c}}{(${c}x + ${d})^2}`
+        ],
+        explanation: `Quotient Rule (ผลหาร): ล่างดิฟบน - บนดิฟล่าง ส่วนล่างกำลังสอง -> (${c}x+${d})(${a}) - (${a}x+${b})(${c}) ส่วน (${c}x+${d})^2 ได้ ${num}`
       };
     },
     () => {
       const a = Math.floor(Math.random() * 3) + 2;
+      const b = Math.floor(Math.random() * 4) + 1;
       return {
-        math: `f(x) = ${a}x(x^2 + 1), f'(x) = ?`,
-        correct: `${a}(3x^2 + 1)`,
-        wrongs: [`${a}(x^2 + 1)`, `${a}(2x^2 + 1)`, `${a}x(2x)`],
-        explanation: `Product Rule หรือกระจายเป็น ${a}x^3 + ${a}x แล้วดิฟได้ ${a*3}x^2 + ${a} ดึงตัวร่วม ${a} ออก`
+        math: `f(x) = ${a}x(x^2 + ${b}), f'(x) = ?`,
+        correct: `${a * 3}x^2 + ${a * b}`,
+        wrongs: [
+          `${a}(x^2 + ${b})`, 
+          `${a * 2}x^2 + ${a * b}`, 
+          `${a}x(2x)`
+        ],
+        explanation: `Product Rule หรือกระจายเป็น ${a}x^3 + ${a*b}x แล้วดิฟได้ ${a*3}x^2 + ${a*b}`
       };
     }
   ];
@@ -165,7 +179,38 @@ function generateBoss() {
         explanation: `Higher-Order: ดิฟครั้งที่ 1 ได้ ${4*a}x^3 - ${3*b}x^2 จากนั้นดิฟครั้งที่ 2 ต่อ`
       };
     },
-    // Kinematics Boss (Velocity)
+      // Nested Chain Rule Boss
+      () => {
+        const a = Math.floor(Math.random() * 3) * 2 + 2; // Even number 2, 4, 6 so 3a/2 is integer
+        const b = Math.floor(Math.random() * 5) + 1;
+        const coef = (3 * a) / 2;
+        return {
+          math: `f(x) = \\sqrt{(${a}x + ${b})^3}, f'(x) = ?`,
+          correct: `${coef}\\sqrt{${a}x + ${b}}`,
+          wrongs: [
+            `\\frac{3}{2}\\sqrt{${a}x + ${b}}`,
+            `${3 * a}\\sqrt{${a}x + ${b}}`,
+            `${coef}(${a}x + ${b})^2`
+          ],
+          explanation: `Nested Chain: แปลงเป็น (${a}x+${b})^{3/2} ตบ 3/2 ลงมาเหลือ 1/2 (รูท) แล้วคูณดิฟไส้ (${a})`
+        };
+      },
+      // Chain Rule with Negative Exponent Boss
+      () => {
+        const a = Math.floor(Math.random() * 3) + 2;
+        const b = Math.floor(Math.random() * 4) + 1;
+        return {
+          math: `f(x) = \\frac{1}{(${a}x^2 + ${b})^2}, f'(x) = ?`,
+          correct: `-\\frac{${4 * a}x}{(${a}x^2 + ${b})^3}`,
+          wrongs: [
+            `\\frac{${4 * a}x}{(${a}x^2 + ${b})^3}`,
+            `-\\frac{${2 * a}x}{(${a}x^2 + ${b})^3}`,
+            `-\\frac{${4 * a}x}{(${a}x^2 + ${b})^2}`
+          ],
+          explanation: `แปลงเป็น (${a}x^2+${b})^{-2} ตบ -2 ลงมาลดกำลังเป็น -3 แล้วคูณดิฟไส้ (2ax)`
+        };
+      },
+      // Kinematics Boss (Velocity)
     () => {
       const a = Math.floor(Math.random() * 3) + 2;
       const b = Math.floor(Math.random() * 5) + 2;
