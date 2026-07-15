@@ -75,7 +75,8 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
   };
 
   useEffect(() => {
-    if (isPaused) return;
+    // Pause timer if paused by user, or if an event/god animation is playing!
+    if (isPaused || activeGod || eventAnnouncement) return;
     
     if (mode === 'timeAttack') {
       timerRef.current = setInterval(() => {
@@ -403,7 +404,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
         if (data.disabled) {
           setDisabledOptions(data.disabled);
           setActiveGod('athena');
-          setTimeout(() => setActiveGod(null), 2600);
+          setTimeout(() => setActiveGod(null), 1500);
         }
     })
     .catch(console.error);
@@ -424,7 +425,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
       if (data.error) throw new Error(data.error);
 
       setActiveGod('lhopital');
-      setTimeout(() => setActiveGod(null), 2600);
+      setTimeout(() => setActiveGod(null), 1500);
 
       // Auto-solve but 0 points
       setSelectedAnswer(data.correctIndex);
@@ -481,7 +482,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     }
     
     setActiveGod('chronos');
-    setTimeout(() => setActiveGod(null), 2600);
+    setTimeout(() => setActiveGod(null), 1500);
     
     setIsSuccessFlashing(true);
     setTimeout(() => setIsSuccessFlashing(false), 400);
@@ -494,7 +495,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     setHermesCharges(3);
     
     setActiveGod('hermes');
-    setTimeout(() => setActiveGod(null), 2600);
+    setTimeout(() => setActiveGod(null), 1500);
     
     const mult = upgrades.hermes === 2 ? 5 : 3;
     setFloatingPoints(prev => ({ text: `${mult}x SCORE!`, id: prev.id + 1 }));
@@ -579,14 +580,14 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
         )}
 
         {activeGod && (
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-20 flex items-center justify-center">
-            <div className="animate-slide-up-fade flex flex-col items-center justify-center text-center bg-black/60 p-4 rounded-lg backdrop-blur-sm border-2 border-zigguratGold">
+          <div className="absolute inset-0 pointer-events-none z-50 flex items-center justify-center">
+            <div className="animate-slide-up-fade flex items-center gap-4 bg-black/80 p-4 rounded-2xl border-2 border-zigguratGold shadow-2xl">
               <img 
                 src={`/${activeGod}.jpg`} 
                 alt={activeGod} 
-                className="w-48 h-48 sm:w-64 sm:h-64 object-cover rounded-lg shadow-2xl mb-2 border border-white/20 mx-auto"
+                className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shadow-md border border-white/20"
               />
-              <div className="text-2xl sm:text-3xl font-black text-zigguratGold uppercase drop-shadow-md">
+              <div className="text-xl sm:text-2xl font-black text-zigguratGold uppercase drop-shadow-md text-left leading-tight pr-4">
                 {activeGod === 'athena' && "Athena's Wisdom!"}
                 {activeGod === 'lhopital' && "L'Hôpital's Secret!"}
                 {activeGod === 'chronos' && (mode === 'tartarus' ? "Life Restored!" : "Time Rewound!")}

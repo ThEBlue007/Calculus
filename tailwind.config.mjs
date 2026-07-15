@@ -20,7 +20,7 @@ export default {
         'float-up': 'floatUp 0.8s ease-out forwards',
         'pulse-fast': 'pulse 0.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-        'slide-up-fade': 'slide-up-fade 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'slide-up-fade': 'slide-up-fade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       },
       keyframes: {
         shake: {

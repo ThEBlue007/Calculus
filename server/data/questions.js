@@ -73,10 +73,10 @@ function generateMedium() {
     () => {
       const a = Math.floor(Math.random() * 5) + 2;
       return {
-        math: `f(x) = ${a}e^x, f'(x) = ?`,
-        correct: `${a}e^x`,
-        wrongs: [`e^x`, `${a}xe^{x-1}`, `${a}e^{x+1}`],
-        explanation: `กฎ Exponential: อนุพันธ์ของ e^x จะได้ค่าตัวมันเองเสมอ (${a}e^x)`
+        math: `f(x) = ${a}\\\\sqrt{x}, f'(x) = ?`,
+        correct: `\\\\frac{${a}}{2\\\\sqrt{x}}`,
+        wrongs: [`\\\\frac{${a}}{\\\\sqrt{x}}`, `\\\\frac{1}{2\\\\sqrt{x}}`, `${a}\\\\sqrt{x}`],
+        explanation: `Power Rule: เปลี่ยน \\\\sqrt{x} เป็น x^{1/2} ตบ 1/2 ลงมาคูณ ${a} จะได้ \\\\frac{${a}}{2}x^{-1/2} หรือ \\\\frac{${a}}{2\\\\sqrt{x}}`
       };
     }
   ];
