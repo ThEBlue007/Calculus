@@ -174,6 +174,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     setTimeout(() => {
       setEventAnnouncement(null);
     }, 1200);
+    return ev;
   };
 
   const fetchNextQuestion = async (currentCount) => {
@@ -202,8 +203,9 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
       // Clear cache once used
       setNextQuestionCache(null);
       
+      let currentEvent = activeEvent;
       if (nextCount > 1 && nextCount % 10 === 4) {
-        triggerRandomEvent();
+        currentEvent = triggerRandomEvent();
       }
 
       if (nextCount > 1 && nextCount % 10 === 8) {
@@ -234,7 +236,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
       setQuestion(data);
       
       // Handle Apollo Reveal
-      if (activeEvent === 'apollo' || (nextCount % 10 === 4)) {
+      if (currentEvent === 'apollo') {
          try {
            const apolloRes = await fetch(`${API_URL}/apollo`, {
              method: 'POST',
