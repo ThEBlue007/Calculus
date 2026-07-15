@@ -49,16 +49,16 @@ function generateEasy() {
 function generateMedium() {
   const templates = [
     () => ({
-      math: `f(x) = \\\\sin x, f'(x) = ?`,
-      correct: `\\\\cos x`,
-      wrongs: [`-\\\\cos x`, `-\\\\sin x`, `\\\\csc x`],
-      explanation: `กฎตรีโกณมิติพื้นฐาน: d/dx(\\\\sin x) = \\\\cos x`
+      math: `f(x) = \\sin x, f'(x) = ?`,
+      correct: `\\cos x`,
+      wrongs: [`-\\cos x`, `-\\sin x`, `\\csc x`],
+      explanation: `กฎตรีโกณมิติพื้นฐาน: d/dx(\\sin x) = \\cos x`
     }),
     () => ({
-      math: `f(x) = \\\\cos x, f'(x) = ?`,
-      correct: `-\\\\sin x`,
-      wrongs: [`\\\\sin x`, `-\\\\cos x`, `\\\\sec x`],
-      explanation: `กฎตรีโกณมิติพื้นฐาน: d/dx(\\\\cos x) = -\\\\sin x`
+      math: `f(x) = \\cos x, f'(x) = ?`,
+      correct: `-\\sin x`,
+      wrongs: [`\\sin x`, `-\\cos x`, `\\sec x`],
+      explanation: `กฎตรีโกณมิติพื้นฐาน: d/dx(\\cos x) = -\\sin x`
     }),
     () => {
       const a = Math.floor(Math.random() * 5) + 2;
@@ -73,10 +73,10 @@ function generateMedium() {
     () => {
       const a = Math.floor(Math.random() * 5) + 2;
       return {
-        math: `f(x) = ${a}\\\\sqrt{x}, f'(x) = ?`,
-        correct: `\\\\frac{${a}}{2\\\\sqrt{x}}`,
-        wrongs: [`\\\\frac{${a}}{\\\\sqrt{x}}`, `\\\\frac{1}{2\\\\sqrt{x}}`, `${a}\\\\sqrt{x}`],
-        explanation: `Power Rule: เปลี่ยน \\\\sqrt{x} เป็น x^{1/2} ตบ 1/2 ลงมาคูณ ${a} จะได้ \\\\frac{${a}}{2}x^{-1/2} หรือ \\\\frac{${a}}{2\\\\sqrt{x}}`
+        math: `f(x) = ${a}\\sqrt{x}, f'(x) = ?`,
+        correct: `\\frac{${a}}{2\\sqrt{x}}`,
+        wrongs: [`\\frac{${a}}{\\sqrt{x}}`, `\\frac{1}{2\\sqrt{x}}`, `${a}\\sqrt{x}`],
+        explanation: `Power Rule: เปลี่ยน \\sqrt{x} เป็น x^{1/2} ตบ 1/2 ลงมาคูณ ${a} จะได้ \\frac{${a}}{2}x^{-1/2} หรือ \\frac{${a}}{2\\sqrt{x}}`
       };
     }
   ];
@@ -88,31 +88,31 @@ function generateHard() {
     () => {
       const a = Math.floor(Math.random() * 5) + 2;
       return {
-        math: `f(x) = \\\\sin(${a}x), f'(x) = ?`,
-        correct: `${a}\\\\cos(${a}x)`,
-        wrongs: [`\\\\cos(${a}x)`, `-${a}\\\\cos(${a}x)`, `\\\\sin(${a}x)`],
-        explanation: `Chain Rule: ดิฟนอกได้ \\\\cos(${a}x) แล้วคูณดิฟไส้ใน ${a}x ได้ ${a}`
+        math: `f(x) = \\sin(${a}x), f'(x) = ?`,
+        correct: `${a}\\cos(${a}x)`,
+        wrongs: [`\\cos(${a}x)`, `-${a}\\cos(${a}x)`, `\\sin(${a}x)`],
+        explanation: `Chain Rule: ดิฟนอกได้ \\cos(${a}x) แล้วคูณดิฟไส้ใน ${a}x ได้ ${a}`
       };
     },
     () => {
       const a = Math.floor(Math.random() * 3) + 2;
       return {
         math: `f(x) = (x^2 + 1)^{${a}}, f'(x) = ?`,
-        correct: `${a}(x^2 + 1)^{${a-1}} \\\\cdot 2x`,
-        wrongs: [`${a}(x^2 + 1)^{${a-1}}`, `${a}(2x)^{${a-1}}`, `(x^2 + 1)^{${a-1}} \\\\cdot 2x`],
+        correct: `${a}(x^2 + 1)^{${a-1}} \\cdot 2x`,
+        wrongs: [`${a}(x^2 + 1)^{${a-1}}`, `${a}(2x)^{${a-1}}`, `(x^2 + 1)^{${a-1}} \\cdot 2x`],
         explanation: `Chain Rule: ตบกำลัง ${a} ลงมาลดกำลัง 1 แล้วคูณด้วยดิฟไส้ใน (2x)`
       };
     },
     () => ({
-      math: `f(x) = x \\\\sin x, f'(x) = ?`,
-      correct: `\\\\sin x + x \\\\cos x`,
-      wrongs: [`\\\\cos x`, `x \\\\cos x`, `\\\\sin x - x \\\\cos x`],
-      explanation: `Product Rule: หน้าดิฟหลัง (x\\\\cos x) + หลังดิฟหน้า (\\\\sin x \\\\cdot 1)`
+      math: `f(x) = x \\sin x, f'(x) = ?`,
+      correct: `\\sin x + x \\cos x`,
+      wrongs: [`\\cos x`, `x \\cos x`, `\\sin x - x \\cos x`],
+      explanation: `Product Rule: หน้าดิฟหลัง (x\\cos x) + หลังดิฟหน้า (\\sin x \\cdot 1)`
     }),
     () => ({
       math: `f(x) = 1/x, f'(x) = ?`,
       correct: `-1/x^2`,
-      wrongs: [`1/x^2`, `\\\\ln|x|`, `-1/x`],
+      wrongs: [`1/x^2`, `\\ln|x|`, `-1/x`],
       explanation: `แปลง 1/x เป็น x^{-1} แล้วใช้ Power Rule จะได้ -1x^{-2} หรือ -1/x^2`
     })
   ];
@@ -126,14 +126,14 @@ function generateBoss() {
       const a = Math.floor(Math.random() * 4) + 2; // 2 to 5
       const b = Math.floor(Math.random() * 4) + 2;
       return {
-        math: `f(x) = x^${a} \\\\sin(${b}x), f'(x) = ?`,
-        correct: `x^{${a-1}}(${a}\\\\sin(${b}x) + ${b}x\\\\cos(${b}x))`,
+        math: `f(x) = x^${a} \\sin(${b}x), f'(x) = ?`,
+        correct: `x^{${a-1}}(${a}\\sin(${b}x) + ${b}x\\cos(${b}x))`,
         wrongs: [
-          `${a}x^{${a-1}}\\\\cos(${b}x)`, 
-          `${a}x^{${a-1}}\\\\sin(${b}x) - ${b}x^${a}\\\\cos(${b}x)`, 
-          `x^{${a-1}}(${b}\\\\sin(${a}x) + ${a}x\\\\cos(${b}x))`
+          `${a}x^{${a-1}}\\cos(${b}x)`, 
+          `${a}x^{${a-1}}\\sin(${b}x) - ${b}x^${a}\\cos(${b}x)`, 
+          `x^{${a-1}}(${b}\\sin(${a}x) + ${a}x\\cos(${b}x))`
         ],
-        explanation: `Product + Chain: หน้า(x^${a})ดิฟหลัง(${b}\\\\cos(${b}x)) + หลัง(\\\\sin(${b}x))ดิฟหน้า(${a}x^{${a-1}})`
+        explanation: `Product + Chain: หน้า(x^${a})ดิฟหลัง(${b}\\cos(${b}x)) + หลัง(\\sin(${b}x))ดิฟหน้า(${a}x^{${a-1}})`
       };
     },
     // Higher-Order Derivative Boss

@@ -91,7 +91,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isPaused, mode]);
+  }, [isPaused, activeGod, eventAnnouncement, mode]);
 
   // Sync ref for zeus event to be used in setInterval
   useEffect(() => {
