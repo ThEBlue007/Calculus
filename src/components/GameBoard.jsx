@@ -4,6 +4,15 @@ import { playSound, playHeartbeat, startBackgroundMusic, stopBackgroundMusic, sf
 import { GameContext } from '../context/GameContext';
 import Minigame from './Minigame';
 
+const formatLaTeX = (rawStr) => {
+  if (!rawStr) return '';
+  let s = rawStr.replace(/\\\\/g, '\\'); 
+  s = s.replace(/\\sqrt([a-zA-Z0-9])/g, '\\sqrt{$1}');
+  s = s.replace(/\\frac([a-zA-Z0-9])([a-zA-Z0-9])/g, '\\frac{$1}{$2}');
+  s = s.replace(/\\dot([a-zA-Z0-9]?)/g, '\\cdot $1');
+  return s;
+};
+
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 const MAX_TIME = 60;
 
@@ -297,8 +306,8 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
       const data = await res.json();
       
       const historyEntry = {
-        math: question.math.replace(/\\\\/g, '\\'),
-        options: question.options.map(opt => opt.replace(/\\\\/g, '\\')),
+        math: formatLaTeX(question.math),
+        options: question.options.map(opt => formatLaTeX(opt)),
         selectedAnswerIndex: index,
         correctAnswerIndex: data.correctAnswerIndex,
         explanation: data.explanation,
@@ -470,8 +479,8 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
       if (hermesCharges > 0) setHermesCharges(prev => prev - 1);
 
       const historyEntry = {
-        math: question.math.replace(/\\\\/g, '\\'),
-        options: question.options.map(opt => opt.replace(/\\\\/g, '\\')),
+        math: formatLaTeX(question.math),
+        options: question.options.map(opt => formatLaTeX(opt)),
         selectedAnswerIndex: data.correctIndex,
         correctAnswerIndex: data.correctIndex,
         explanation: "ใช้ L'Hôpital's Secret ข้ามข้อนี้",
@@ -741,7 +750,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
               <span className="text-zigguratStone/50 font-black tracking-widest text-xl">HIDDEN</span>
             ) : (
               <div className={`drop-shadow-md text-white max-w-full overflow-hidden flex justify-center items-center ${getMathSizeClass()}`}>
-                <BlockMath math={question.math.replace(/\\\\/g, '\\')} />
+                <BlockMath math={formatLaTeX(question.math)} />
               </div>
             )}
           </div>
@@ -788,7 +797,7 @@ export default function GameBoard({ onGameOver, onQuit, mode = 'timeAttack' }) {
                   style={{ minHeight: question?.isBoss ? '60px' : '80px' }}
                 >
                   <div className="flex items-center justify-center overflow-x-auto scrollbar-hide py-1">
-                    {isPaused ? <span className="text-white/20">?</span> : <BlockMath math={opt.replace(/\\\\/g, '\\')} />}
+                    {isPaused ? <span className="text-white/20">?</span> : <BlockMath math={formatLaTeX(opt)} />}
                   </div>
                 </button>
               );
