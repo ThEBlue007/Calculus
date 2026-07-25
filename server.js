@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Any request that doesn't match an API route should serve the React app
-app.get('*', (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
