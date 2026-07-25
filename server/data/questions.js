@@ -383,5 +383,3 @@ async function getCorrectAnswer(id, isTwin = false) {
 }
 
 module.exports = { generateQuestion, validateAnswer, useAthena, getCorrectAnswer };
-/ /   T r i g g e r   d e p l o y m e n t  
- 
