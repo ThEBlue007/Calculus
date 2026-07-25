@@ -80,10 +80,10 @@ function generateMedium() {
     () => {
       const a = Math.floor(Math.random() * 5) + 2;
       return {
-        math: `f(x) = ${a}\\sqrt{x}, f'(x) = ?`,
-        correct: `\\frac{${a}}{2\\sqrt{x}}`,
-        wrongs: [`\\frac{${a}}{\\sqrt{x}}`, `\\frac{1}{2\\sqrt{x}}`, `${a}\\sqrt{x}`],
-        explanation: `Power Rule: เปลี่ยน $$\\sqrt{x}$$ เป็น $$x^{1/2}$$ ตบ $$1/2$$ ลงมาคูณ $${a}$$ จะได้ $$\\frac{${a}}{2}x^{-1/2}$$ หรือ $$\\frac{${a}}{2\\sqrt{x}}$$`
+        math: `f(x) = ${a}\\\\sqrt{x}, f'(x) = ?`,
+        correct: `\\\\frac{${a}}{2\\\\sqrt{x}}`,
+        wrongs: [`\\\\frac{${a}}{\\\\sqrt{x}}`, `\\\\frac{1}{2\\\\sqrt{x}}`, `${a}\\\\sqrt{x}`],
+        explanation: `Power Rule: เปลี่ยน $$\\\\sqrt{x}$$ เป็น $$x^{1/2}$$ ตบ $$1/2$$ ลงมาคูณ $${a}$$ จะได้ $$\\\\frac{${a}}{2}x^{-1/2}$$ หรือ $$\\\\frac{${a}}{2\\\\sqrt{x}}$$`
       };
     }
   ];
@@ -119,14 +119,14 @@ function generateHard() {
       const d = Math.floor(Math.random() * 4) + 1;
       const num = a * d - b * c;
       return {
-        math: `f(x) = \\frac{${a}x + ${b}}{${c}x + ${d}}, f'(x) = ?`,
-        correct: `\\frac{${num}}{(${c}x + ${d})^2}`,
+        math: `f(x) = \\\\frac{${a}x + ${b}}{${c}x + ${d}}, f'(x) = ?`,
+        correct: `\\\\frac{${num}}{(${c}x + ${d})^2}`,
         wrongs: [
-          `\\frac{${a}}{${c}}`, 
-          `\\frac{${a*d + b*c}}{(${c}x + ${d})^2}`, 
-          `\\frac{${a}x - ${c}}{(${c}x + ${d})^2}`
+          `\\\\frac{${a}}{${c}}`, 
+          `\\\\frac{${a*d + b*c}}{(${c}x + ${d})^2}`, 
+          `\\\\frac{${a}x - ${c}}{(${c}x + ${d})^2}`
         ],
-        explanation: `Quotient Rule (ผลหาร): ล่างดิฟบน - บนดิฟล่าง ส่วนล่างกำลังสอง -> $$(${c}x+${d})(${a}) - (${a}x+${b})(${c})$$ ส่วน $$(${c}x+${d})^2$$ ได้ $$\\frac{${num}}{(${c}x + ${d})^2}$$`
+        explanation: `Quotient Rule (ผลหาร): ล่างดิฟบน - บนดิฟล่าง ส่วนล่างกำลังสอง -> $$(${c}x+${d})(${a}) - (${a}x+${b})(${c})$$ ส่วน $$(${c}x+${d})^2$$ ได้ $$\\\\frac{${num}}{(${c}x + ${d})^2}$$`
       };
     },
     () => {
@@ -185,11 +185,11 @@ function generateBoss() {
         const b = Math.floor(Math.random() * 5) + 1;
         const coef = (3 * a) / 2;
         return {
-          math: `f(x) = \\sqrt{(${a}x + ${b})^3}, f'(x) = ?`,
-          correct: `${coef}\\sqrt{${a}x + ${b}}`,
+          math: `f(x) = \\\\sqrt{(${a}x + ${b})^3}, f'(x) = ?`,
+          correct: `${coef}\\\\sqrt{${a}x + ${b}}`,
           wrongs: [
-            `\\frac{3}{2}\\sqrt{${a}x + ${b}}`,
-            `${3 * a}\\sqrt{${a}x + ${b}}`,
+            `\\\\frac{3}{2}\\\\sqrt{${a}x + ${b}}`,
+            `${3 * a}\\\\sqrt{${a}x + ${b}}`,
             `${coef}(${a}x + ${b})^2`
           ],
           explanation: `Nested Chain: แปลงเป็น $$(${a}x+${b})^{3/2}$$ ตบ $$3/2$$ ลงมาเหลือ $$1/2$$ (รูท) แล้วคูณดิฟไส้ ($${a}$$)`
@@ -200,12 +200,12 @@ function generateBoss() {
         const a = Math.floor(Math.random() * 3) + 2;
         const b = Math.floor(Math.random() * 4) + 1;
         return {
-          math: `f(x) = \\frac{1}{(${a}x^2 + ${b})^2}, f'(x) = ?`,
-          correct: `-\\frac{${4 * a}x}{(${a}x^2 + ${b})^3}`,
+          math: `f(x) = \\\\frac{1}{(${a}x^2 + ${b})^2}, f'(x) = ?`,
+          correct: `-\\\\frac{${4 * a}x}{(${a}x^2 + ${b})^3}`,
           wrongs: [
-            `\\frac{${4 * a}x}{(${a}x^2 + ${b})^3}`,
-            `-\\frac{${2 * a}x}{(${a}x^2 + ${b})^3}`,
-            `-\\frac{${4 * a}x}{(${a}x^2 + ${b})^2}`
+            `\\\\frac{${4 * a}x}{(${a}x^2 + ${b})^3}`,
+            `-\\\\frac{${2 * a}x}{(${a}x^2 + ${b})^3}`,
+            `-\\\\frac{${4 * a}x}{(${a}x^2 + ${b})^2}`
           ],
           explanation: `แปลงเป็น $$(${a}x^2+${b})^{-2}$$ ตบ $$-2$$ ลงมาลดกำลังเป็น $$-3$$ แล้วคูณดิฟไส้ ($$2ax$$)`
         };
