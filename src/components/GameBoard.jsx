@@ -7,9 +7,19 @@ import Minigame from './Minigame';
 const formatLaTeX = (rawStr) => {
   if (!rawStr) return '';
   let s = String(rawStr).replace(/\\\\/g, '\\'); 
-  s = s.replace(/\\sqrt\s*([a-zA-Z0-9])/g, '\\sqrt{$1}');
+  
+  // 1. ดัก frac ที่ตามด้วยเลขและรูท เช่น \frac4\sqrtx -> \frac{4}{\sqrt{x}}
+  s = s.replace(/\\frac\s*([a-zA-Z0-9])\s*\\sqrt\s*([a-zA-Z0-9])/g, '\\frac{$1}{\\sqrt{$2}}');
+  
+  // 2. ดัก frac ที่เป็นเลข 2 ตัว เช่น \frac12 -> \frac{1}{2}
   s = s.replace(/\\frac\s*([a-zA-Z0-9])\s*([a-zA-Z0-9])/g, '\\frac{$1}{$2}');
+  
+  // 3. ดัก sqrt ธรรมดา เช่น \sqrtx -> \sqrt{x}
+  s = s.replace(/\\sqrt\s*([a-zA-Z0-9])/g, '\\sqrt{$1}');
+  
+  // 4. ดักจุดคูณ \dot -> \cdot
   s = s.replace(/\\dot\s*([a-zA-Z0-9]?)/g, '\\cdot $1');
+  
   return s;
 };
 
