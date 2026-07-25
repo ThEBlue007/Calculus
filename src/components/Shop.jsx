@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { GameContext } from '../context/GameContext';
 
 export default function Shop({ onBack }) {
