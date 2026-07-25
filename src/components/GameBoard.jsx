@@ -6,10 +6,10 @@ import Minigame from './Minigame';
 
 const formatLaTeX = (rawStr) => {
   if (!rawStr) return '';
-  let s = rawStr.replace(/\\\\/g, '\\'); 
-  s = s.replace(/\\sqrt([a-zA-Z0-9])/g, '\\sqrt{$1}');
-  s = s.replace(/\\frac([a-zA-Z0-9])([a-zA-Z0-9])/g, '\\frac{$1}{$2}');
-  s = s.replace(/\\dot([a-zA-Z0-9]?)/g, '\\cdot $1');
+  let s = String(rawStr).replace(/\\\\/g, '\\'); 
+  s = s.replace(/\\sqrt\s*([a-zA-Z0-9])/g, '\\sqrt{$1}');
+  s = s.replace(/\\frac\s*([a-zA-Z0-9])\s*([a-zA-Z0-9])/g, '\\frac{$1}{$2}');
+  s = s.replace(/\\dot\s*([a-zA-Z0-9]?)/g, '\\cdot $1');
   return s;
 };
 

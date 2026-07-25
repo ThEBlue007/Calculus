@@ -180,6 +180,10 @@ export default function App() {
           <Shop onBack={() => setGameState('menu')} />
         </div>
       )}
+
+      <div className="fixed bottom-2 right-2 text-zigguratStone/30 text-xs font-mono pointer-events-none z-50">
+        v1.0.1
+      </div>
     </div>
   );
 }
