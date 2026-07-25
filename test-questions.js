@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+//: uuidv4 } = require('uuid');
 const ActiveQuestion = require('../models/ActiveQuestion');
 
 function shuffleOptions(correctOption, wrongOptions) {
@@ -80,10 +80,10 @@ function generateMedium() {
     () => {
       const a = Math.floor(Math.random() * 5) + 2;
       return {
-        math: `f(x) = ${a}√x, f'(x) = ?`,
-        correct: `${a} / (2√x)`,
-        wrongs: [`${a} / √x`, `1 / (2√x)`, `${a}√x`],
-        explanation: `Power Rule: เปลี่ยน $$\\\\sqrt{x}$$ เป็น $$x^{1/2}$$ ตบ $$1/2$$ ลงมาคูณ $${a}$$ จะได้ $$\\\\frac{${a}}{2}x^{-1/2}$$ หรือ $$${a} / (2√x)$$`
+        math: `f(x) = ${a}\\\\sqrt{x}, f'(x) = ?`,
+        correct: `\\\\frac{${a}}{2\\\\sqrt{x}}`,
+        wrongs: [`\\\\frac{${a}}{\\\\sqrt{x}}`, `\\\\frac{1}{2\\\\sqrt{x}}`, `${a}\\\\sqrt{x}`],
+        explanation: `Power Rule: เปลี่ยน $$\\\\sqrt{x}$$ เป็น $$x^{1/2}$$ ตบ $$1/2$$ ลงมาคูณ $${a}$$ จะได้ $$\\\\frac{${a}}{2}x^{-1/2}$$ หรือ $$\\\\frac{${a}}{2\\\\sqrt{x}}$$`
       };
     }
   ];
@@ -97,8 +97,8 @@ function generateHard() {
       const b = Math.floor(Math.random() * 4) + 2;
       return {
         math: `f(x) = (${a}x + ${b})^3, f'(x) = ?`,
-        correct: `3(${a}x + ${b})^2 · ${a}`,
-        wrongs: [`3(${a}x + ${b})^2`, `(${a}x + ${b})^2 · ${a}`, `3(${a})^2`],
+        correct: `3(${a}x + ${b})^2 \\\\cdot ${a}`,
+        wrongs: [`3(${a}x + ${b})^2`, `(${a}x + ${b})^2 \\\\cdot ${a}`, `3(${a})^2`],
         explanation: `Chain Rule: ตบกำลัง 3 ลงมาลดกำลัง 1 แล้วคูณด้วยดิฟไส้ใน ($${a}$$)`
       };
     },
@@ -106,8 +106,8 @@ function generateHard() {
       const a = Math.floor(Math.random() * 3) + 2;
       return {
         math: `f(x) = (x^2 + 1)^{${a}}, f'(x) = ?`,
-        correct: `${a}(x^2 + 1)^{${a-1}} · 2x`,
-        wrongs: [`${a}(x^2 + 1)^{${a-1}}`, `${a}(2x)^{${a-1}}`, `(x^2 + 1)^{${a-1}} · 2x`],
+        correct: `${a}(x^2 + 1)^{${a-1}} \\\\cdot 2x`,
+        wrongs: [`${a}(x^2 + 1)^{${a-1}}`, `${a}(2x)^{${a-1}}`, `(x^2 + 1)^{${a-1}} \\\\cdot 2x`],
         explanation: `Chain Rule: ตบกำลัง $${a}$$ ลงมาลดกำลัง 1 แล้วคูณด้วยดิฟไส้ใน ($$2x$$)`
       };
     },
@@ -158,8 +158,8 @@ function generateBoss() {
         correct: `x^{${a-1}}(x + ${b})((${a+2})x + ${a*b})`,
         wrongs: [
           `${a}x^{${a-1}}(x + ${b})^2`, 
-          `x^${a} · 2(x + ${b})`, 
-          `${a}x^{${a-1}} · 2(x + ${b})`
+          `x^${a} \\\\cdot 2(x + ${b})`, 
+          `${a}x^{${a-1}} \\\\cdot 2(x + ${b})`
         ],
         explanation: `Product Rule: หน้า($$x^${a}$$)ดิฟหลัง($$2(x+${b})$$) + หลัง($$(x+${b})^2$$)ดิฟหน้า($$${a}x^{${a-1}}$$) แล้วดึงตัวร่วม`
       };
@@ -185,11 +185,11 @@ function generateBoss() {
         const b = Math.floor(Math.random() * 5) + 1;
         const coef = (3 * a) / 2;
         return {
-          math: `f(x) = √(${a}x + ${b})^3, f'(x) = ?`,
-          correct: `${coef}√(${a}x + ${b})`,
+          math: `f(x) = \\\\sqrt{(${a}x + ${b})^3}, f'(x) = ?`,
+          correct: `${coef}\\\\sqrt{${a}x + ${b}}`,
           wrongs: [
-            `3 / (2√(${a}x + ${b}))`,
-            `${3 * a}√(${a}x + ${b})`,
+            `\\\\frac{3}{2}\\\\sqrt{${a}x + ${b}}`,
+            `${3 * a}\\\\sqrt{${a}x + ${b}}`,
             `${coef}(${a}x + ${b})^2`
           ],
           explanation: `Nested Chain: แปลงเป็น $$(${a}x+${b})^{3/2}$$ ตบ $$3/2$$ ลงมาเหลือ $$1/2$$ (รูท) แล้วคูณดิฟไส้ ($${a}$$)`
@@ -374,7 +374,10 @@ async function getCorrectAnswer(id, isTwin = false) {
   
   if (!q) return null;
   
-  // LHopital no longer deletes to allow validateAnswer to run
+  // We can delete it if L'Hopital is used
+  if (!isTwin || q.type !== 'twin_boss') {
+    await ActiveQuestion.deleteOne({ _id: q._id });
+  }
   
   return isTwin ? q.twinData.correctIndex : q.correctIndex;
 }
